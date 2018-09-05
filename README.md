@@ -3,9 +3,11 @@
 This is a pytorch implementation of the pervasive attention model:  [Arxiv](https://arxiv.org/abs/1808.03867)
 
 
-### Requirements (besides pytorch)
+### Requirements
 ```
-pip install tensorboardX h5py 
+pytorch (0.4.0)
+h5py
+tensorboardX 
 ```
 
 ### Usage:
