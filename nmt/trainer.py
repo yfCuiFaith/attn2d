@@ -150,9 +150,6 @@ class Trainer(object):
                 flag = ''
             # load model's weights
             saved_weights = torch.load(osp.join(start_from, 'model%s.pth' % flag))
-            if params['reverse']:
-                # adapat the loaded weight for the reverse task
-                saved_weights = self.reverse_weights(saved_weights)
             self.model.load_state_dict(saved_weights)
             del saved_weights
             # load the optimizer's last state:
@@ -167,14 +164,6 @@ class Trainer(object):
         # start with eval:
         # self.iteration -= 1
         return iterators_state
-
-    def reverse_weights(self, loaded):
-        for k in loaded:
-            print(k, loaded[k].size())
-        current = self.model.state_dict()
-        for k in current:
-            print(k, current[k].size())
-        return loaded
 
     def update_params(self, val_loss=None):
         """
@@ -227,7 +216,7 @@ class Trainer(object):
 
         if self.clip_norm > 0:
             grad_norm = torch.nn.utils.clip_grad_norm_(self.model.parameters(),
-                                                       self.clip_norm).data.item()
+                                                       self.clip_norm)
         self.track('optim/grad_norm', grad_norm)
         self.track('optim/ntokens', ntokens)
         self.track('optim/batch_size', nseqs)
